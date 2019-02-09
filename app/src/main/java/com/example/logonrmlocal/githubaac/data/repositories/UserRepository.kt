@@ -52,7 +52,7 @@ constructor(private val webservice: UserWebService, private val userDao: UserDao
 
     companion object {
 
-        private const val FRESH_TIMEOUT_IN_MINUTES = 3
+        private const val FRESH_TIMEOUT_IN_MINUTES =1
     }
 }
 

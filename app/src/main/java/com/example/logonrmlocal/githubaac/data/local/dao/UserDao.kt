@@ -20,6 +20,6 @@ interface UserDao{
 
 
 
-    @Query("SELECT * FROM User WHERE login =:login AND lastRefresh = :lastRefresh LIMIT 1")
+    @Query("SELECT * FROM User WHERE login =:login AND lastRefresh > :lastRefresh LIMIT 1")
     fun hasUser(login: String, lastRefresh: Date): User
 }

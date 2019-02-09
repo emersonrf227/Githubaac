@@ -8,6 +8,7 @@ import com.example.logonrmlocal.githubaac.data.local.dao.UserDao
 import com.example.logonrmlocal.githubaac.data.local.empty.User
 import com.example.logonrmlocal.githubaac.data.remote.UserWebService
 import com.example.logonrmlocal.githubaac.data.repositories.UserRepository
+import com.facebook.stetho.okhttp3.StethoInterceptor
 import retrofit2.Retrofit
 import javax.inject.Singleton
 import dagger.Provides
@@ -15,6 +16,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import dagger.Module
+import okhttp3.OkHttpClient
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 
@@ -33,6 +35,17 @@ class AppModule {
         )
                 .build()
     }
+
+
+    @Provides
+    @Singleton
+    fun provideOkhttp() : OkHttpClient {
+        return OkHttpClient.Builder()
+                .addNetworkInterceptor(StethoInterceptor())
+                .build();
+    }
+
+
     @Provides
     @Singleton
     fun provideUserDao(database: MeuBancoDeDados): UserDao {
@@ -56,10 +69,11 @@ class AppModule {
         return GsonBuilder().create()
     }
     @Provides
-    fun provideRetrofit(gson: Gson): Retrofit {
+    fun provideRetrofit(gson: Gson, okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create(gson))
-                .baseUrl(BASE_URL)
+                .baseUrl("https://api.github.com")
+                .client(okHttpClient)
                 .build()
     }
     @Provides
